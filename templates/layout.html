@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AdminLTE 3 | Dashboard</title>
+
+  <!-- Google Font: Source Sans Pro -->
+<!-- Google Font: Source Sans Pro (CDN) -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+
+<!-- Font Awesome -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='adminlte/plugins/fontawesome-free/css/all.min.css') }}">
+
+<!-- Ionicons (CDN) -->
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+
+<!-- Tempusdominus Bootstrap 4 -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='adminlte/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css') }}">
+
+<!-- iCheck -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='adminlte/plugins/icheck-bootstrap/icheck-bootstrap.min.css') }}">
+
+<!-- JQVMap -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='adminlte/plugins/jqvmap/jqvmap.min.css') }}">
+
+<!-- AdminLTE -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='adminlte/css/adminlte.min.css') }}">
+
+<!-- overlayScrollbars -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='adminlte/plugins/overlayScrollbars/css/OverlayScrollbars.min.css') }}">
+
+<!-- Daterange picker -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='adminlte/plugins/daterangepicker/daterangepicker.css') }}">
+
+<!-- Summernote -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='adminlte/plugins/summernote/summernote-bs4.min.css') }}">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+
+
+</head>
+
+
+
+
+
+
+<body class="hold-transition sidebar-mini layout-fixed">
+  <div class="wrapper">
+    {% include '_navbar.html' %}
+    {% include '_sidebar.html' %}
+    
+    <div class="content-wrapper">
+      {% block content %}{% endblock %}
+    </div>
+  </div>
+
+
+{% block scripts %}{% endblock %}
+
+{% block head_extra %}{% endblock %}
+
+
+<script>
+document.getElementById('servicio').addEventListener('input', function () {
+  const input = this.value.toLowerCase();
+  const opciones = document.querySelectorAll('#servicios option');
+  let found = false;
+
+  opciones.forEach(option => {
+    if (option.value.toLowerCase() === input) {
+      const id = option.dataset.id;
+      const precio = option.dataset.precio;
+
+      document.getElementById('precio').value = precio;
+      document.getElementById('servicio_id_real').value = id;
+      found = true;
+    }
+  });
+
+  if (!found) {
+    document.getElementById('precio').value = '';
+    document.getElementById('servicio_id_real').value = '';
+  }
+});
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  const inputServicio = document.getElementById('servicio');
+  const precioInput = document.getElementById('precio');
+  const servicioIdInput = document.getElementById('servicio_id_real');
+
+  inputServicio.addEventListener('input', function () {
+    const input = this.value.toLowerCase();
+    const opciones = document.querySelectorAll('#servicios option');
+    let found = false;
+
+    opciones.forEach(option => {
+      if (option.value.toLowerCase() === input) {
+        servicioIdInput.value = option.dataset.id;
+        precioInput.value = option.dataset.precio;
+        found = true;
+      }
+    });
+
+    if (!found) {
+      servicioIdInput.value = '';
+      precioInput.value = '';
+    }
+  });
+});
+</script>
+
+
+<script>
+  function buscarCliente() {
+    const dni = document.getElementById('dni').value.trim();
+    if (dni.length === 8) {
+      fetch(`/clientes/buscar/${dni}`)
+        .then(response => response.json())
+        .then(data => {
+          if (data.nombre) {
+            document.getElementById('nombre').value = data.nombre;
+          } else {
+            document.getElementById('nombre').value = "";
+          }
+        });
+    } else {
+      document.getElementById('nombre').value = "";
+    }
+  }
+
+  // Ejecutar automáticamente al escribir
+  document.addEventListener('DOMContentLoaded', function () {
+    document.getElementById('dni').addEventListener('input', buscarCliente);
+  });
+</script>
+
+
+
+
+<!-- jQuery -->
+<script src="plugins/jquery/jquery.min.js"></script>
+<!-- jQuery UI 1.11.4 -->
+<script src="plugins/jquery-ui/jquery-ui.min.js"></script>
+<!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+<script>
+  $.widget.bridge('uibutton', $.ui.button)
+</script>
+<!-- Bootstrap 4 -->
+<!-- jQuery -->
+<script src="{{ url_for('static', filename='adminlte/plugins/jquery/jquery.min.js') }}"></script>
+
+<!-- Bootstrap -->
+<script src="{{ url_for('static', filename='adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+
+<!-- ChartJS -->
+<script src="{{ url_for('static', filename='adminlte/plugins/chart.js/Chart.min.js') }}"></script>
+
+<!-- Sparkline -->
+<script src="{{ url_for('static', filename='adminlte/plugins/sparklines/sparkline.js') }}"></script>
+
+<!-- JQVMap -->
+<script src="{{ url_for('static', filename='adminlte/plugins/jqvmap/jquery.vmap.min.js') }}"></script>
+<script src="{{ url_for('static', filename='adminlte/plugins/jqvmap/maps/jquery.vmap.usa.js') }}"></script>
+
+<!-- jQuery Knob Chart -->
+<script src="{{ url_for('static', filename='adminlte/plugins/jquery-knob/jquery.knob.min.js') }}"></script>
+
+<!-- Daterangepicker -->
+<script src="{{ url_for('static', filename='adminlte/plugins/moment/moment.min.js') }}"></script>
+<script src="{{ url_for('static', filename='adminlte/plugins/daterangepicker/daterangepicker.js') }}"></script>
+
+<!-- Tempusdominus Bootstrap 4 -->
+<script src="{{ url_for('static', filename='adminlte/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js') }}"></script>
+
+<!-- Summernote -->
+<script src="{{ url_for('static', filename='adminlte/plugins/summernote/summernote-bs4.min.js') }}"></script>
+
+<!-- OverlayScrollbars -->
+<script src="{{ url_for('static', filename='adminlte/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js') }}"></script>
+
+<!-- AdminLTE App -->
+<script src="{{ url_for('static', filename='adminlte/js/adminlte.min.js') }}"></script>
+
+<!-- AdminLTE demo (opcional) -->
+<script src="{{ url_for('static', filename='adminlte/js/demo.js') }}"></script>
+
+<!-- AdminLTE dashboard demo (opcional, solo para template) -->
+<script src="{{ url_for('static', filename='adminlte/js/pages/dashboard.js') }}"></script>
+
+</body>
+</html>

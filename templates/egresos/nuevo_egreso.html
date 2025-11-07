@@ -1,0 +1,42 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-3">Registrar Nuevo Egreso</h2>
+
+    <form method="POST">
+        <div class="mb-3">
+            <label for="barbero_id" class="form-label">Persona/Barbero</label>
+            <select class="form-select" id="barbero_id" name="barbero_id">
+                <option value="">Recepcionista</option>
+                {% for barbero in barberos %}
+                <option value="{{ barbero.id }}">{{ barbero.nickname }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label for="hora" class="form-label">Hora (opcional)</label>
+            <input type="time" class="form-control" id="hora" name="hora" placeholder="HH:MM">
+        </div>
+
+
+        <div class="mb-3">
+            <label for="motivo" class="form-label">Motivo/Descripción</label>
+            <input type="text" class="form-control" id="motivo" name="motivo" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="monto" class="form-label">Monto (S/.)</label>
+            <input type="number" step="0.01" class="form-control" id="monto" name="monto" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="observacion" class="form-label">Observación (opcional)</label>
+            <textarea class="form-control" id="observacion" name="observacion"></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Guardar</button>
+        <a href="{{ url_for('main.listar_egresos') }}" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div>
+{% endblock %}

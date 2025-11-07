@@ -1,0 +1,83 @@
+<div class="my-3 mx-auto" style="max-width: 1240px; width: 100%;">
+
+  <!-- WIDGET SOBRIO COMPACTO -->
+  <div class="card shadow-sm border-0 my-2">
+    <!-- Cabecera -->
+    <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center py-1 px-2 border-bottom">
+        <h6 class="mb-0 text-white"><i class="bi bi-clipboard-data me-1 fs-6"></i>Resumen del Día</h6>
+        <span class="badge bg-secondary text-white fs-7 py-1 px-2">
+            {{ date.today().strftime("%d/%m/%Y") }}
+        </span>
+    </div>
+
+    <div class="card-body p-1">
+
+        <!-- Totales compactos -->
+        <div class="row g-1 text-center mb-1">
+          <div class="col-4">
+            <div class="card shadow-sm h-100 border-0">
+              <div class="card-body py-1 px-2">
+                  <i class="bi bi-cash-coin fs-2 text-success"></i>
+                  <div class="mt-0 very-small text-uppercase">Total</div>
+                  <div class="fw-bold very-small">S/. {{ data.total_neto }}</div>
+              </div>
+            </div>
+          </div>
+          <div class="col-4">
+            <div class="card shadow-sm h-100 border-0">
+              <div class="card-body py-1 px-2">
+                  <i class="bi bi-graph-up-arrow fs-2 text-primary"></i>
+                  <div class="mt-0 very-small text-uppercase">Ingresos</div>
+                  <div class="fw-bold very-small">S/. {{ data.ingresos }}</div>
+              </div>
+            </div>
+          </div>
+          <div class="col-4">
+            <div class="card shadow-sm h-100 border-0">
+              <div class="card-body py-1 px-2">
+                  <i class="bi bi-graph-down-arrow fs-2 text-danger"></i>
+                  <div class="mt-0 very-small text-uppercase">Egresos</div>
+                  <div class="fw-bold very-small">S/. {{ data.egresos }}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Métodos de pago compactos -->
+        <div class="row g-1 text-center mb-1">
+        {% set pagos_icons = {'yape':'bi-phone','plin':'bi-phone-fill','efectivo':'bi-cash-stack','otro':'bi-wallet2'} %}
+        {% set pagos_colors = {'yape':'#7b2cbf','plin':'#6f42c1','efectivo':'#28a745','otro':'#fd7e14'} %}
+        {% for metodo, monto in data.pagos.items() %}
+          <div class="col-3">
+            <div class="card border-0 shadow-sm h-100">
+              <div class="card-body py-1 px-1 bg-white rounded text-center">
+                 <i class="bi {{ pagos_icons.get(metodo, 'bi-wallet2') }} fs-2" style="color: '{{ pagos_colors.get(metodo, '#fd7e14') }}';"></i>
+                  <div class="mt-0 very-small">{{ metodo|capitalize }}</div>
+                  <div class="fw-bold very-small">S/. {{ monto }}</div>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+        </div>
+
+        <!-- Servicios realizados ultra-compactos -->
+        <div class="card border-0 shadow-sm text-center mt-1 mb-1">
+          <div class="card-body py-1 px-2">
+              <i class="bi bi-scissors fs-2 text-secondary"></i>
+              <div class="very-small text-muted mt-0">Servicios realizados</div>
+              <div class="fw-bold very-small">{{ data.servicios_realizados }}</div>
+          </div>
+        </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Estilos extra -->
+<style>
+  .very-small { 
+      font-size: 0.7rem; 
+      line-height: 1; 
+      margin: 0; 
+  }
+</style>

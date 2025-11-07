@@ -1,0 +1,67 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="container pt-4">
+  <div class="card shadow-sm">
+    <div class="card-header">
+      <h4>Registrar nuevo barbero</h4>
+    </div>
+    <div class="card-body">
+      <form method="POST" enctype="multipart/form-data" action="{{ url_for('main.agregar_barbero') }}">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label>Nombres</label>
+              <input type="text" class="form-control" name="nombres" required>
+            </div>
+            <div class="form-group">
+              <label>Apellidos</label>
+              <input type="text" class="form-control" name="apellidos" required>
+            </div>
+            <div class="form-group">
+              <label>Correo</label>
+              <input type="email" class="form-control" name="correo" required>
+            </div>
+            <div class="form-group">
+              <label>Teléfono</label>
+              <input type="text" class="form-control" name="telefono">
+            </div>
+            <div class="form-group">
+              <label>Contraseña</label>
+              <input type="password" class="form-control" name="contrasena" required>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="form-group">
+              <label>Nickname</label>
+              <input type="text" class="form-control" name="nickname" required>
+            </div>
+            <div class="form-group">
+              <label>Especialidad</label>
+              <select class="form-control" name="especialidad">
+                {% for s in servicios %}
+                <option value="{{ s.nombre }}">{{ s.nombre }}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <div class="form-group">
+                <label>DNI</label>
+                <input type="text" name="dni" class="form-control" maxlength="8" pattern="\d{8}" required>
+            </div>
+
+            <div class="form-group">
+              <label>Foto de perfil</label>
+              <input type="file" class="form-control-file" name="foto">
+            </div>
+          </div>
+        </div>
+
+        <div class="text-right">
+          <button type="submit" class="btn btn-primary">Registrar</button>
+          <a href="{{ url_for('main.listar_barberos') }}" class="btn btn-secondary">Cancelar</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

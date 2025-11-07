@@ -1,0 +1,47 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="container py-4">
+  <h3 class="mb-4">Editar Barbero</h3>
+
+  <form method="POST">
+    <div class="form-group mb-3">
+      <label for="nombres">Nombres</label>
+      <input type="text" class="form-control" id="nombres" name="nombres" value="{{ barbero.nombres }}" required>
+    </div>
+
+    <div class="form-group mb-3">
+      <label for="apellidos">Apellidos</label>
+      <input type="text" class="form-control" id="apellidos" name="apellidos" value="{{ barbero.apellidos }}" required>
+    </div>
+
+    <div class="form-group mb-3">
+      <label for="correo">Correo</label>
+      <input type="email" class="form-control" id="correo" name="correo" value="{{ barbero.correo }}" required>
+    </div>
+
+    <div class="form-group mb-3">
+      <label for="telefono">Teléfono</label>
+      <input type="text" class="form-control" id="telefono" name="telefono" value="{{ barbero.telefono }}">
+    </div>
+
+    <div class="form-group mb-3">
+      <label for="nickname">Nickname</label>
+      <input type="text" class="form-control" id="nickname" name="nickname" value="{{ barbero.nickname }}" required>
+    </div>
+
+    {# Campo para nueva contraseña #}
+    <div class="form-group mb-3">
+      <label for="contrasena">Nueva Contraseña</label>
+      <input type="password" class="form-control" id="contrasena" name="contrasena">
+    </div> 
+
+    <button type="submit" class="btn btn-primary">
+      <i class="fas fa-save"></i> Guardar cambios
+    </button>
+    <a href="{{ url_for('main.perfil_barbero', barbero_id=barbero.id) }}" class="btn btn-secondary ml-2">
+      Cancelar
+    </a>
+  </form>
+</div>
+{% endblock %}

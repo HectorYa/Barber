@@ -1,0 +1,28 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="container mt-4">
+    <h2>{% if cliente %}Editar Cliente{% else %}Nuevo Cliente{% endif %}</h2>
+    <form method="POST">
+    <div class="form-group">
+        <label for="nombre">Nombre</label>
+        <input type="text" class="form-control" name="nombre" value="{{ cliente.nombre if cliente else '' }}" required>
+    </div>
+    <div class="form-group">
+        <label for="dni">DNI</label>
+        <input type="text" class="form-control" name="dni" maxlength="8" value="{{ cliente.dni if cliente else '' }}" required>
+    </div>
+    <div class="form-group">
+        <label for="telefono">Teléfono</label>
+        <input type="text" class="form-control" name="telefono" value="{{ cliente.telefono if cliente.telefono else '' }}">
+    </div>
+    <div class="form-group">
+        <label for="correo">Correo</label>
+        <input type="email" class="form-control" name="correo"
+       value="{{ cliente.correo if cliente.correo else '' }}">
+
+    </div>
+    <button type="submit" class="btn btn-success">Guardar</button>
+    </form>
+</div>
+</div>
+{% endblock %}

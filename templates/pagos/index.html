@@ -1,0 +1,27 @@
+{% extends "layout.html" %}
+{% block title %}Gestión de Pagos{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+  <h2 class="mb-4">Selecciona un barbero para ver sus pagos</h2>
+
+  <div class="row">
+    {% for b in barberos %}
+    <div class="col-md-4 mb-3">
+      <div class="card shadow">
+        <div class="card-body text-center">
+          <img src="{{ b.foto_url or url_for('static', filename='img/default.png') }}" class="rounded-circle mb-2" width="80" height="80">
+          <h5 class="card-title">{{ b.nickname }}</h5>
+          <p class="card-text">{{ b.nombres }} {{ b.apellidos }}</p>
+          <a href="{{ url_for('main.pagos_barbero', barbero_id=b.id) }}" class="btn btn-primary">
+            Ver pagos
+          </a>
+        </div>
+      </div>
+    </div>
+    {% else %}
+    <p class="text-muted">No hay barberos registrados.</p>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,181 @@
+{% extends "layout.html" %}
+{% block title %}Reporte Diario - {{ fecha.strftime('%d/%m/%Y') }}{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+
+  <!-- Título -->
+  <div class="d-flex align-items-center justify-content-between mb-4">
+    <h2 class="fw-bold mb-0">
+      <i class="fas fa-calendar-day text-primary me-2"></i>
+      Reporte Diario - {{ fecha.strftime('%d/%m/%Y') }}
+    </h2>
+  </div>
+
+  <!-- Resumen de Totales -->
+  <div class="row g-3 mb-4">
+    <div class="col-md-3">
+      <div class="card shadow-sm border-0 rounded-3 h-100">
+        <div class="card-body text-center">
+          <i class="fas fa-wallet text-success fa-2x mb-2"></i>
+          <h6 class="text-muted">Ingresos Totales</h6>
+          <p class="h4 fw-bold text-success">S/. {{ '%.2f' % reporte.ingresos_total }}</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-3">
+      <div class="card shadow-sm border-0 rounded-3 h-100">
+        <div class="card-body text-center">
+          <i class="fas fa-user-tie text-info fa-2x mb-2"></i>
+          <h6 class="text-muted">Total Barberos</h6>
+          <p class="h4 fw-bold text-info">S/. {{ '%.2f' % total_barberos }}</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-3">
+      <div class="card shadow-sm border-0 rounded-3 h-100">
+        <div class="card-body text-center">
+          <i class="fas fa-chart-line text-success fa-2x mb-2"></i>
+          <h6 class="text-muted">Ganancia Neta</h6>
+          <p class="h4 fw-bold text-success">S/. {{ '%.2f' % reporte.ganancia_neta }}</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-3">
+      <div class="card shadow-sm border-0 rounded-3 h-100">
+        <div class="card-body text-center">
+          <i class="fas fa-money-bill-wave text-danger fa-2x mb-2"></i>
+          <h6 class="text-muted">Egresos</h6>
+          <p class="h4 fw-bold text-danger">S/. {{ '%.2f' % egresos_total }}</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-3">
+      <div class="card shadow-sm border-0 rounded-3 h-100 bg-warning bg-opacity-10">
+        <div class="card-body text-center">
+          <i class="fas fa-exclamation-circle text-warning fa-2x mb-2"></i>
+          <h6 class="text-muted">Servicios sin Cobrar</h6>
+          <p class="fw-bold h5 text-dark mb-1">{{ servicios_sin_cobrar }} servicios</p>
+          <p class="text-muted mb-0">S/. {{ '%.2f' % total_no_pagados }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Totales por método de pago -->
+  <div class="card mb-5 shadow-sm border-0">
+    <div class="card-header bg-light fw-bold">
+      <i class="fas fa-credit-card me-2 text-primary"></i>Métodos de Pago
+    </div>
+    <div class="card-body">
+      <div class="row text-center g-3">
+        <div class="col-md-3">
+          <div class="p-3 bg-light rounded">
+            <strong class="text-success">Yape:</strong>
+            <p class="mb-0 h5">S/. {{ '%.2f' % reporte.total_yape }}</p>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="p-3 bg-light rounded">
+            <strong class="text-purple">Plin:</strong>
+            <p class="mb-0 h5">S/. {{ '%.2f' % reporte.total_plin }}</p>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="p-3 bg-light rounded">
+            <strong class="text-dark">Efectivo:</strong>
+            <p class="mb-0 h5">S/. {{ '%.2f' % reporte.total_efectivo }}</p>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="p-3 bg-light rounded">
+            <strong class="text-secondary">Otro:</strong>
+            <p class="mb-0 h5">S/. {{ '%.2f' % reporte.total_otro }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Servicios del día -->
+  <h4 class="fw-bold mb-3"><i class="fas fa-cut me-2 text-primary"></i>Servicios Terminados</h4>
+  {% if servicios %}
+  <div class="table-responsive mb-5">
+    <table class="table table-hover align-middle">
+      <thead class="table-dark">
+        <tr>
+          <th>Hora</th>
+          <th>Servicio</th>
+          <th>Cliente</th>
+          <th>Precio</th>
+          <th>% Barbero</th>
+          <th>Ganancia Barbero</th>
+          <th>Ganancia Empresa</th>
+          <th>Estado de Pago</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for s in servicios %}
+        <tr>
+          <td>{{ s.hora_inicio_estimada.strftime('%H:%M') }}</td>
+          <td>{{ s.servicio.nombre }}</td>
+          <td>{{ s.reserva.cliente.nombre }}</td>
+          <td class="fw-bold">S/. {{ '%.2f' % s.precio_final }}</td>
+          <td>{{ '%.0f' % (s.porcentaje_barbero*100) }}%</td>
+          <td class="text-info">S/. {{ '%.2f' % (s.precio_final * s.porcentaje_barbero) }}</td>
+          <td>
+            {% if s.reserva.estado_pago == 'pagado' %}
+              <span class="text-success fw-bold">S/. {{ '%.2f' % (s.precio_final * (1 - s.porcentaje_barbero)) }}</span>
+            {% else %}
+              <span class="text-muted">0.00</span>
+            {% endif %}
+          </td>
+          <td>
+            {% if s.reserva.estado_pago == 'pagado' %}
+              <span class="badge bg-success">Pagado</span>
+            {% else %}
+              <span class="badge bg-danger">No pagado</span>
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <p class="text-muted fst-italic">No hay servicios terminados para esta fecha.</p>
+  {% endif %}
+
+  <!-- Egresos -->
+  <h4 class="fw-bold mb-3"><i class="fas fa-receipt me-2 text-danger"></i>Egresos / Gastos</h4>
+  {% if egresos %}
+  <div class="table-responsive">
+    <table class="table table-striped align-middle">
+      <thead class="table-danger">
+        <tr>
+          <th>Hora</th>
+          <th>Motivo</th>
+          <th>Monto</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for e in egresos %}
+        <tr>
+          <td>{{ e.hora.strftime('%H:%M') }}</td>
+          <td>{{ e.motivo }}</td>
+          <td class="fw-bold text-danger">S/. {{ '%.2f' % e.monto }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <p class="text-muted fst-italic">No hay egresos registrados para esta fecha.</p>
+  {% endif %}
+
+</div>
+{% endblock %}

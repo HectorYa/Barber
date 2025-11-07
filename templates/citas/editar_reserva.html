@@ -1,0 +1,88 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<div class="container pt-4">
+  <h4 class="mb-4">Editar Cita</h4>
+
+  <form method="POST">
+    <div class="form-row">
+      <div class="form-group col-md-4">
+        <label for="servicio">Servicio</label>
+        <select class="form-control" name="servicio_id" required>
+          {% for s in servicios %}
+          <option value="{{ s.id }}" {% if s.id == rs.servicio_id %}selected{% endif %}>
+            {{ s.nombre }}
+          </option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="form-group col-md-3">
+        <label for="barbero">Barbero</label>
+        <select class="form-control" name="barbero_id" required>
+          {% for b in barberos %}
+          <option value="{{ b.id }}" {% if b.id == rs.barbero_id %}selected{% endif %}>
+            {{ b.nickname }}
+          </option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="form-group col-md-2">
+        <label for="precio">Monto (S/.)</label>
+        <input type="number" step="0.10" class="form-control" name="precio_final" value="{{ rs.precio_final }}" required>
+      </div>
+
+      <div class="form-group col-md-3">
+        <label for="persona">¿Quién se hará el corte?</label>
+        <input type="text" class="form-control" name="persona_atendida" value="{{ rs.persona_atendida }}">
+      </div>
+    </div>
+
+    <div class="form-row">
+    <div class="form-group col-md-3">
+        <label for="hora">Hora de la cita</label>
+        <input type="time" class="form-control" name="hora" value="{{ rs.hora_inicio_estimada.strftime('%H:%M') }}">
+    </div>
+
+    <div class="form-group col-md-3">
+        <label for="fecha">Fecha de la cita</label>
+        <input type="date" class="form-control" name="fecha" value="{{ rs.reserva.fecha_reserva }}">
+    </div>
+
+    <div class="form-group col-md-3">
+        <label for="metodo_pago">Método de pago</label>
+        <select class="form-control" name="metodo_pago">
+        <option value="">-- Seleccionar --</option>
+        <option value="efectivo" {% if rs.reserva.metodo_pago == 'efectivo' %}selected{% endif %}>Efectivo</option>
+        <option value="yape" {% if rs.reserva.metodo_pago == 'yape' %}selected{% endif %}>Yape</option>
+        <option value="plin" {% if rs.reserva.metodo_pago == 'plin' %}selected{% endif %}>Plin</option>
+        <option value="otro" {% if rs.reserva.metodo_pago == 'otro' %}selected{% endif %}>Otro</option>
+        </select>
+    </div>
+    </div>
+    <div class="form-group">
+      <label for="estado_servicio">Estado de la cita</label>
+      <select class="form-control" id="estado_servicio" name="estado_servicio">
+        <option value="en_espera" {% if rs.estado_servicio == 'en_espera' %}selected{% endif %}>En espera</option>
+        <option value="en_proceso" {% if rs.estado_servicio == 'en_proceso' %}selected{% endif %}>En proceso</option>
+        <option value="terminado" {% if rs.estado_servicio == 'terminado' %}selected{% endif %}>Realizado</option>
+        <option value="cancelado" {% if rs.estado_servicio == 'cancelado' %}selected{% endif %}>Cancelado</option>
+      </select>
+    </div>
+
+
+    <div class="form-group">
+    <label for="comentario">Comentario</label>
+    <textarea class="form-control" name="comentario">{{ rs.comentario }}</textarea>
+    </div>
+
+    <div class="form-group">
+    <button type="submit" class="btn btn-primary">
+        <i class="fas fa-save"></i> Guardar cambios
+    </button>
+    <a href="{{ url_for('main.reservas') }}" class="btn btn-secondary">Cancelar</a>
+    </div>
+
+
+{% endblock %}

@@ -1,0 +1,99 @@
+{% extends "layout.html" %}
+{% block title %}Pagos - {{ barbero.nickname }}{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+  <h2 class="mb-4">Pagos del barbero: {{ barbero.nickname }}</h2>
+
+  <!-- Filtro por fecha -->
+  <form method="GET" class="form-inline mb-4">
+    <label for="fecha" class="mr-2">Seleccionar fecha:</label>
+    <input type="date" name="fecha" id="fecha" value="{{ fecha.strftime('%Y-%m-%d') }}" class="form-control mr-2">
+    <button type="submit" class="btn btn-primary">Filtrar</button>
+  </form>
+
+  <!-- Servicios realizados -->
+  <h4>Servicios realizados</h4>
+  {% if reservas %}
+  <div class="table-responsive shadow-sm mb-4">
+    <table class="table table-striped table-hover table-bordered">
+      <thead class="thead-light">
+        <tr>
+          <th>Hora</th>
+          <th>Servicio</th>
+          <th>Cliente</th>
+          <th>Precio</th>
+          <th>% Barbero</th>
+          <th>Ganancia Barbero</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for detalle in reservas %}
+          {% if detalle.barbero_id == barbero.id %}
+            {% set ganancia = detalle.precio_final * (detalle.porcentaje_barbero or 0.5) %}
+            <tr>
+              <td>{{ detalle.hora_inicio_estimada.strftime('%H:%M') }}</td>
+              <td>{{ detalle.servicio.nombre }}</td>
+              <td>{{ detalle.reserva.cliente.nombre }} {{ detalle.reserva.cliente.apellido }}</td>
+              <td>S/. {{ '%.2f' % detalle.precio_final }}</td>
+              <td>{{ '%.0f' % ((detalle.porcentaje_barbero or 0.5)*100) }}%</td>
+              <td>S/. {{ '%.2f' % ganancia }}</td>
+            </tr>
+          {% endif %}
+        {% endfor %}
+      </tbody>
+      <tfoot>
+        <tr>
+          <th colspan="5" class="text-right">Total Ganado</th>
+          <th>S/. {{ '%.2f' % total_servicios }}</th>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+  {% else %}
+    <p class="text-muted">No hay servicios registrados para esta fecha.</p>
+  {% endif %}
+
+  <!-- Egresos / Descuentos -->
+  <h4>Descuentos / Egresos</h4>
+  {% if egresos %}
+  <div class="table-responsive shadow-sm mb-4">
+    <table class="table table-striped table-hover table-bordered">
+      <thead class="thead-light">
+        <tr>
+          <th>Hora</th>
+          <th>Motivo</th>
+          <th>Monto</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for e in egresos %}
+          <tr>
+            <td>{{ e.hora.strftime('%H:%M') }}</td>
+            <td>{{ e.motivo }}</td>
+            <td>S/. {{ '%.2f' % e.monto }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+      <tfoot>
+        <tr>
+          <th colspan="2" class="text-right">Total Descuentos</th>
+          <th>S/. {{ '%.2f' % total_descuentos }}</th>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+  {% else %}
+    <p class="text-muted">No hay descuentos registrados.</p>
+  {% endif %}
+
+  <!-- Total neto -->
+  <div class="mt-4 p-3 shadow-sm rounded" style="background-color: #f8f9fa;">
+    <h4 class="mb-3">Total Neto a Pagar</h4>
+    <p><strong>Total servicios:</strong> S/. {{ '%.2f' % total_servicios }}</p>
+    <p><strong>Total descuentos:</strong> S/. {{ '%.2f' % total_descuentos }}</p>
+    <hr>
+    <p class="h4 text-success font-weight-bold">S/. {{ '%.2f' % total_final }}</p>
+  </div>
+</div>
+{% endblock %}

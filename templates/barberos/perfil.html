@@ -1,0 +1,90 @@
+{% extends "layout.html" %}
+
+
+
+{% block content %}
+<div class="container pt-4">
+  <h2>Perfil del barbero: {{ barbero.nickname }}</h2>
+
+  <!-- DATOS DEL BARRBERO -->
+  <div class="card mb-4">
+    <div class="card-body d-flex align-items-center">
+      <img src="{{ url_for('static', filename='img/barberos/default.png') }}"
+           alt="Foto de {{ barbero.nickname }}"
+           class="rounded-circle mr-3"
+           width="80" height="80">
+      <div class="ml-3">
+        <h4 class="mb-1">{{ barbero.nombres }} {{ barbero.apellidos }}</h4>
+        <p class="mb-1"><strong>Email:</strong> {{ barbero.email }}</p>
+        <p class="mb-1"><strong>Teléfono:</strong> {{ barbero.telefono }}</p>
+        <p class="mb-0"><strong>Especialidad:</strong> {{ barbero.especialidad or 'No especificada' }}</p>
+      </div>
+      <div>
+        <a href="{{ url_for('main.editar_barbero', id=barbero.id) }}" class="btn btn-sm btn-primary">
+          <i class="fas fa-edit"></i> Editar
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- RESUMEN FINANCIERO -->
+  <div class="row text-center mb-4"> 
+    <div class="col-md-4">
+      <div class="p-3 border rounded bg-success bg-opacity-10">
+        <h6 class="text-success">Ganancia histórica</h6>
+        <p class="h5 mb-0 text-success">S/. {{ '%.2f' % total_ganancia_hist }}</p>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="p-3 border rounded bg-danger bg-opacity-10">
+        <h6 class="text-danger">Egresos históricos</h6>
+        <p class="h5 mb-0 text-danger">S/. {{ '%.2f' % total_egresos_hist }}</p>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="p-3 border rounded bg-primary bg-opacity-10">
+        <h6 class="text-primary">Total neto histórico</h6>
+        <p class="h5 mb-0 text-primary">S/. {{ '%.2f' % total_final_hist }}</p>
+      </div>
+    </div>
+  </div>
+
+
+
+  <!-- ÚLTIMAS RESERVAS -->
+  <h5 class="mt-4">Últimas reservas atendidas</h5>
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th>Cliente</th>
+        <th>Servicio</th>
+        <th>Fecha</th>
+        <th>Estado</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for detalle in ultimas_reservas %}
+      <tr>
+        <td>
+          {% if detalle.reserva.cliente %}
+            {{ detalle.reserva.cliente.nombre }} {{ detalle.reserva.cliente.apellido or '' }}
+          {% else %}
+            Sin nombre
+          {% endif %}
+        </td>
+        <td>{{ detalle.servicio.nombre }}</td>
+        <td>{{ detalle.reserva.fecha_reserva.strftime('%d/%m/%Y') }}</td>
+        <td>{{ detalle.estado_servicio }}</td>
+      </tr>
+      {% else %}
+      <tr><td colspan="4" class="text-center">No hay reservas recientes.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+
+
+</div>
+{% endblock %}

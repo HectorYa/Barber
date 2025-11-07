@@ -1,0 +1,135 @@
+<!-- Main Sidebar Container -->
+<aside class="main-sidebar sidebar-dark-primary elevation-4">
+    <!-- Brand Logo -->
+    <a href="/dashboard" class="brand-link">
+      <img src="static/img/logos/side_img.png" alt="Logo" class="brand-image img-circle elevation-3" style="opacity: .8" >
+      <span class="brand-text font-weight-light">*</span>
+    </a>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <!-- Sidebar user panel (optional) -->
+        <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+            <div class="image">
+            <img src="static/img/usuarios/perfil.png" class="img-circle elevation-2" alt="User Image">
+            </div>
+            <div class="info">
+                <a href="#" class="d-block">{{ session.user_nombre }}</a>
+                <small class="badge badge-info">{{ session.user_rol }}</small>
+            </div>
+        </div>
+
+        <!-- SidebarSearch Form -->
+        <div class="form-inline">
+            <div class="input-group" data-widget="sidebar-search">
+            <input class="form-control form-control-sidebar" type="search" placeholder="Search" aria-label="Search">
+            <div class="input-group-append">
+                <button class="btn btn-sidebar">
+                <i class="fas fa-search fa-fw"></i>
+                </button>
+            </div>
+            </div>
+        </div>
+
+        <!-- Sidebar Menu -->
+        <nav class="mt-2">
+        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview">
+    
+    <!-- ========== OPCIONES SOLO PARA BARBEROS ========== -->
+    {% if session.user_rol == 'admin' %}
+        <!-- Panel principal -->
+        <li class="nav-item">
+            <a href="/dashboard" class="nav-link">
+            <i class="nav-icon fas fa-tachometer-alt"></i>
+            <p>Dashboard</p>
+            </a>
+        </li>
+
+        <!-- Servicios -->
+        <li class="nav-item">
+            <a href="/servicios" class="nav-link">
+            <i class="nav-icon fas fa-cut"></i>
+            <p>Servicios</p>
+            </a>
+        </li>
+
+        <!-- Citas -->
+        <li class="nav-item">
+            <a href="/citas" class="nav-link">
+            <i class="nav-icon fas fa-calendar-check"></i>
+            <p>Citas</p>
+            </a>
+        </li>
+
+        <!-- Clientes -->
+        <li class="nav-item">
+            <a href="/clientes" class="nav-link">
+            <i class="nav-icon fas fa-users"></i>
+            <p>Clientes</p>
+            </a>
+        </li>
+
+        <!-- Egresos -->
+        <li class="nav-item">
+            <a href="/egresos" class="nav-link">
+                <i class="nav-icon fas fa-receipt"></i>
+                <p>Egresos</p>
+            </a>
+        </li>
+
+        <!-- Reportes -->
+        <li class="nav-item">
+            <a href="/reportes" class="nav-link">
+            <i class="nav-icon fas fa-chart-line"></i>
+            <p>Reportes</p>
+            </a>
+        </li>
+               <!-- Gestión de barberos -->
+        <li class="nav-item">
+            <a href="/barberos" class="nav-link">
+            <i class="nav-icon fas fa-user-tie"></i>
+            <p>Barberos</p>
+            </a>
+        </li>
+
+        <!-- Pagos -->
+        <li class="nav-item">
+            <a href="/pagos" class="nav-link">
+            <i class="nav-icon fas fa-cash-register"></i>
+            <p>Pagos</p>
+            </a>
+        </li>
+    {% endif %}
+
+    <!-- ========== OPCIONES PARA BARBEROS Y ADMINISTRADORES ========== -->
+    {% if session.user_rol in ['barbero'] %}
+        <!-- Gestión de barberos -->
+        <li class="nav-item">
+            <a href="/barberos" class="nav-link">
+            <i class="nav-icon fas fa-user-tie"></i>
+            <p>Barberos</p>
+            </a>
+        </li>
+
+        <!-- Pagos -->
+        <li class="nav-item">
+            <a href="/pagos" class="nav-link">
+            <i class="nav-icon fas fa-cash-register"></i>
+            <p>Pagos</p>
+            </a>
+        </li>
+    {% endif %}
+
+    <!-- ========== LOGOUT (PARA TODOS) ========== -->
+    <li class="nav-item mt-3">
+        <a href="{{ url_for('main.logout') }}" class="nav-link bg-danger">
+        <i class="nav-icon fas fa-sign-out-alt"></i>
+        <p>Cerrar Sesión</p>
+        </a>
+    </li>
+
+    </ul>
+    </nav>
+    </div>
+    <!-- /.sidebar -->
+</aside>
